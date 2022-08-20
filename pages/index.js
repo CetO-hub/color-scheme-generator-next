@@ -8,12 +8,20 @@ export default function Home() {
   const [colorPattern, setColorPattern] = useState("");
   const formData = {
     mode: "",
-    color: "",
+    color: "#000000",
   };
 
-  function handleOnChange() {
-    console.log(e.target);
-    setColorPattern();
+  console.log(colorPattern);
+
+  function handleOnChange(e) {
+    const { name, value } = e.target;
+    // return console.log(e.target);
+    setColorPattern((oldPattern) => {
+      return {
+        ...oldPattern,
+        [name]: value,
+      };
+    });
   }
 
   return (
@@ -27,7 +35,11 @@ export default function Home() {
       </div>
       <main>
         <div className=" mx-auto w-full max-w-5xl h-full flex flex-col justify-between items-center">
-          <Form onChance={handleOnChange} />
+          <Form
+            onChange={handleOnChange}
+            mode={colorPattern.mode}
+            color={colorPattern.color}
+          />
           <ColorField />
         </div>
       </main>
