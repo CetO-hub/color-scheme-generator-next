@@ -4,7 +4,7 @@ const Form = (props) => {
   return (
     <>
       <form
-        action=""
+        onSubmit={props.onSubmit}
         className="font-bold flex justify-center items-center w-full gap-x-5 shadow-lg p-5"
       >
         <input

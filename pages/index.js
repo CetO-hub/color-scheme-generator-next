@@ -5,13 +5,27 @@ import ColorField from "../components/ColorField";
 import Form from "../components/Form";
 
 export default function Home() {
-  const [colorPattern, setColorPattern] = useState("");
-  const formData = {
-    mode: "",
-    color: "#000000",
-  };
-
-  console.log(colorPattern);
+  const [colorPattern, setColorPattern] = useState({
+    mode: "monochrome",
+    color: "000000",
+  });
+  const [requestedColorPattern, setRequestedColorPattern] = useState([
+    {
+      color: "#000000",
+    },
+    {
+      color: "#000000",
+    },
+    {
+      color: "#000000",
+    },
+    {
+      color: "#000000",
+    },
+    {
+      color: "#000000",
+    },
+  ]);
 
   function handleOnChange(e) {
     const { name, value } = e.target;
@@ -22,6 +36,23 @@ export default function Home() {
         [name]: value,
       };
     });
+  }
+
+  function getColorScheme(e) {
+    e.preventDefault();
+    fetch(
+      `https://www.thecolorapi.com/scheme?hex=${colorPattern.color.substring(
+        1
+      )}&mode=${colorPattern.mode}&count=5`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setRequestedColorPattern((oldItem) => {
+          return data.colors.map((item) => {
+            return { color: item.hex.value };
+          });
+        });
+      });
   }
 
   return (
@@ -36,11 +67,12 @@ export default function Home() {
       <main>
         <div className=" mx-auto w-full max-w-5xl h-full flex flex-col justify-between items-center">
           <Form
+            onSubmit={getColorScheme}
             onChange={handleOnChange}
             mode={colorPattern.mode}
             color={colorPattern.color}
           />
-          <ColorField />
+          <ColorField setColor={requestedColorPattern} />
         </div>
       </main>
     </>
